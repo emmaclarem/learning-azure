@@ -1,48 +1,53 @@
-// {
-//     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-//     "contentVersion": "1.0.0.1",
-//     "apiProfile": "",
-//     "parameters": {},
-//     "variables": {},
-//     "functions": [],
-//     "resources": [
-//       {
-//         "type": "Microsoft.Storage/storageAccounts",
-//         "apiVersion": "2019-06-01",
-//         "name": "learntemplatestorage123",
-//         "location": "westus",
-//         "sku": {
-//           "name": "Standard_LRS"
-//         },
-//         "kind": "StorageV2",
-//         "properties": {
-//           "supportsHttpsTrafficOnly": true
-//         }
-//       }
-//     ],
-//     "outputs": {}
-//   }
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
+    "parameters": {
+        "storageSKU": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_RAGRS",
+                "Standard_ZRS",
+                "Premium_LRS",
+                "Premium_ZRS",
+                "Standard_GZRS",
+                "Standard_RAGZRS"
+            ],
+            "metadata": {
+                "description": "Storage Account type"
+            }
+        },
+        "storageName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "The name of the Azure storage resource"
+            }
+        }
+    },
     "functions": [],
     "variables": {},
     "resources": [
         {
-        "name": "emma-learndemo-storage01",
+        "name": "[parameters('storageName')]",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2021-04-01",
         "tags": {
-            "displayName": "emma-learndemo-storage01"
+            "displayName": "[parameters('storageName')]"
         },
         "location": "[resourceGroup().location]",
         "kind": "StorageV2",
         "sku": {
-            "name": "Standard_LRS",
+            "name": "[parameters('storageSKU')]",
             "tier": "Standard"
+            },
+        "properties": {
+            "supportsHttpsTrafficOnly": true
             }
-         }
+        }
     ],
     "outputs": {}
 }
